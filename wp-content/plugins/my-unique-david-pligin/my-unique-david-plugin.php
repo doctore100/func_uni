@@ -8,7 +8,11 @@ Version: 1.0
  */
 
 class wordCountUniquePlugin {
+    function __construct() {
+        add_action('admin_menu', 'myUniqueDavidPlugin');
 
+
+    }
 }
 
 $wordCountUniquePlugin = new wordCountUniquePlugin();
