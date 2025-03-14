@@ -1,0 +1,64 @@
+# Node modules
+/node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+
+# Compiled assets
+/dist/
+/build/
+*.map
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# WordPress specific
+wp-config.php
+wp-content/advanced-cache.php
+wp-content/backup-db/
+wp-content/backups/
+wp-content/blogs.dir/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/uploads/
+wp-content/wp-cache-config.php
+
+# Editor files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Package files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+# Plugin specific
+/vendor/
+/languages/*.mo
+/languages/*.pot
+
+# Testing related
+/phpunit.xml
+/.phpunit.result.cache
+/coverage/
+
+# Composer
+composer.lock
