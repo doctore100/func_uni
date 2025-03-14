@@ -10,6 +10,7 @@ Version: 1.0
 class wordCountUniquePlugin {
 	function __construct() {
 		add_action( 'admin_menu', array( $this, 'adminPage' ) );
+		add_action( 'admin_init', array( $this, 'settingsInit' ) );
 
 
 	}
@@ -20,14 +21,25 @@ class wordCountUniquePlugin {
 			'Word Count',
 			'manage_options',
 			'my-unique-david-plugin',
-			'ourHTML'
+			array( $this, 'ourHTML' )
 		);
 	}
 
 	function ourHTML() {
 		?>
-        echo "Hello World";
+        echo "Hello ClassLoader";
 	<?php }
+
+	function settingsInit() {
+		register_setting(
+			'wordCountPlugin',
+			'wcp_location',
+			array(
+				$this,
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => '0'
+			) );
+	}
 }
 
 $wordCountUniquePlugin = new wordCountUniquePlugin();
