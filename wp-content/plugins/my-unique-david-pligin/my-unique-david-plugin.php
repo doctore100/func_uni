@@ -9,10 +9,40 @@ Version: 1.0
 
 class wordCountUniquePlugin {
 	function __construct() {
-		add_action( 'admin_menu', array( $this, 'adminPage' ) );
-		add_action( 'admin_init', array( $this, 'settingsInit' ) );
+		add_action (
+			'admin_menu',
+			array( $this, 'adminPage' ) );
 
+		add_action (
+			'admin_init',
+			array( $this, 'settingsInit' )
+        );
+	}
 
+	function settingsInit () {
+		add_settings_section (
+			'wpc_first_section',
+			'Word Count',
+			array( $this, 'sectionHTML' ),
+			'my-unique-david-plugin'
+		);
+
+		add_settings_field (
+			'wcp_location',
+			'Display Location',
+			array( $this, 'locationHTML' ),
+			'my-unique-david-plugin',
+			'wcp_first_section'
+		);
+
+		register_setting (
+			'wordCountPlugin',
+			'wcp_location',
+			array(
+				$this,
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => '0'
+			) );
 	}
 
 	function adminPage( $content ): void {
@@ -29,17 +59,6 @@ class wordCountUniquePlugin {
 		?>
         echo "Hello ClassLoader";
 	<?php }
-
-	function settingsInit() {
-		register_setting(
-			'wordCountPlugin',
-			'wcp_location',
-			array(
-				$this,
-				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => '0'
-			) );
-	}
 }
 
 $wordCountUniquePlugin = new wordCountUniquePlugin();
