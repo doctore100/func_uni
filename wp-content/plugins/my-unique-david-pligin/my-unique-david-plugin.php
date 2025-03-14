@@ -8,29 +8,27 @@ Version: 1.0
  */
 
 class wordCountUniquePlugin {
-    function __construct() {
-        add_action('admin_menu', 'myUniqueDavidPlugin');
+	function __construct() {
+		add_action( 'admin_menu', array( $this, 'adminPage' ) );
 
 
-    }
+	}
+
+	function adminPage( $content ): void {
+		add_options_page(
+			'Word Count page',
+			'Word Count',
+			'manage_options',
+			'my-unique-david-plugin',
+			'ourSettingsPageUniqueHtml'
+		);
+	}
+
+	function ourSettingsPageUniqueHtml() {
+		?>
+        echo "Hello World";
+	<?php }
 }
 
 $wordCountUniquePlugin = new wordCountUniquePlugin();
 
-add_action('admin_menu', 'myUniqueDavidPlugin');
-function myUniqueDavidPlugin($content)
-{
-    add_options_page(
-        'Word Count page',
-        'Word Count',
-        'manage_options',
-        'my-unique-david-plugin',
-        'ourSettingsPageUniqueHtml'
-    );
-}
-
-function ourSettingsPageUniqueHtml()
-{
-    ?>
-    echo "Hello World";
-<?php }
