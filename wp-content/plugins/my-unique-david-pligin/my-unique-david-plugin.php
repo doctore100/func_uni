@@ -20,11 +20,11 @@ class wordCountUniquePlugin {
 			'Word Count',
 			'manage_options',
 			'my-unique-david-plugin',
-			'ourSettingsPageUniqueHtml'
+			'ourHTML'
 		);
 	}
 
-	function ourSettingsPageUniqueHtml() {
+	function ourHTML() {
 		?>
         echo "Hello World";
 	<?php }
