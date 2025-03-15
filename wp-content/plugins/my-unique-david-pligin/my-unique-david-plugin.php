@@ -16,16 +16,29 @@ class wordCountUniquePlugin {
 
 		add_action(
 			'admin_init',
-			array( $this, 'settingsInit' )
+			array( $this, 'settings' )
 		);
 	}
 
-	function settingsInit(): void {
-		add_settings_section(
-			'wpc_first_section',
-			null,
-			null,
-			'my-unique-david-plugin'
+	function adminPage(): void {
+		add_options_page(
+			'Word Count page',
+			'Word Count',
+			'manage_options',
+			'my-unique-david-plugin',
+			array( $this, 'ourHTML' )
+		);
+	}
+
+	function settings(): void {
+		register_setting(
+			'wordCountPlugin',
+			'wcp_location',
+			array(
+				$this,
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => '0'
+			)
 		);
 
 		add_settings_field(
@@ -36,33 +49,14 @@ class wordCountUniquePlugin {
 			'wcp_first_section'
 		);
 
-		register_setting(
-			'wordCountPlugin',
-			'wcp_location',
-			array(
-				$this,
-				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => '0'
-			)
+		add_settings_section(
+			'wcp_first_section',
+			null,
+			null,
+			'my-unique-david-plugin'
 		);
-	}
 
-	function locationHTML() {
-		?>
-        <select name="wcp_location">
-            <option value="0">Beginning of Post</option>
-        </select>
-		<?php
-	}
 
-	function adminPage( $content ): void {
-		add_options_page(
-			'Word Count page',
-			'Word Count',
-			'manage_options',
-			'my-unique-david-plugin',
-			array( $this, 'ourHTML' )
-		);
 	}
 
 	function ourHTML() {
@@ -70,14 +64,23 @@ class wordCountUniquePlugin {
         <div class="warp">
             <h1>Word Count Setting</h1>
             <form action="options.php" method="POST">
-
-				<?php settings_fields( 'wordCountPlugin' ); ?>
-				<?php do_settings_sections( 'my-unique-david-plugin' ); ?>
-				<?php submit_button(); ?>
-
+				<?php
+				settings_fields( 'wordCountPlugin' );
+				do_settings_sections( 'my-unique-david-plugin' );
+				submit_button();
+				?>
             </form>
         </div>
 	<?php }
+
+	function locationHTML() {
+		?>
+        <select name="wcp_location">
+            <option value="0">Beginning of Post</option>
+            <option value="1">End of Post</option>
+        </select>
+		<?php
+	}
 }
 
 $wordCountUniquePlugin = new wordCountUniquePlugin();
