@@ -65,8 +65,8 @@ class wordCountUniquePlugin {
             <h1>Word Count Setting</h1>
             <form action="options.php" method="POST">
 				<?php
-				settings_fields( 'wordCountPlugin' );
 				do_settings_sections( 'my-unique-david-plugin' );
+				settings_fields( 'wordCountPlugin' );
 				submit_button();
 				?>
             </form>
