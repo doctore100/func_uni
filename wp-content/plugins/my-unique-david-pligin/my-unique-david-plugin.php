@@ -20,11 +20,11 @@ class wordCountUniquePlugin {
 		);
 	}
 
-	function settingsInit() {
+	function settingsInit(): void {
 		add_settings_section(
 			'wpc_first_section',
-			'Word Count',
-			array( $this, 'sectionHTML' ),
+			null,
+			null,
 			'my-unique-david-plugin'
 		);
 
@@ -47,6 +47,14 @@ class wordCountUniquePlugin {
 		);
 	}
 
+	function locationHTML() {
+		?>
+        <select name="wcp_location">
+            <option value="0">Beginning of Post</option>
+        </select>
+		<?php
+	}
+
 	function adminPage( $content ): void {
 		add_options_page(
 			'Word Count page',
@@ -59,7 +67,16 @@ class wordCountUniquePlugin {
 
 	function ourHTML() {
 		?>
-        echo "Hello ClassLoader";
+        <div class="warp">
+            <h1>Word Count Setting</h1>
+            <form action="options.php" method="POST">
+
+				<?php settings_fields( 'wordCountPlugin' ); ?>
+				<?php do_settings_sections( 'my-unique-david-plugin' ); ?>
+				<?php submit_button(); ?>
+
+            </form>
+        </div>
 	<?php }
 }
 
