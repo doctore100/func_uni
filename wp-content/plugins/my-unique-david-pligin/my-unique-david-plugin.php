@@ -186,26 +186,38 @@ class Word_Count_Plugin {
 	}
 
 	/**
-	 * Render the word count field
+	 * Generic method to render checkbox fields
+	 *
+	 * @param string $option_name The option name without the 'wcp_' prefix
 	 */
-	public function render_word_count_field(): void {
+	private function render_checkbox_field( string $option_name ): void {
+		$full_option_name = "wcp_{$option_name}";
 		?>
-        <input type="checkbox" name="wcp_word_count" value="1" <?php checked( get_option( 'wcp_word_count' ), '1' ); ?>>
+        <input type="checkbox" name="<?php echo esc_attr( $full_option_name ); ?>"
+               value="1" <?php checked( get_option( $full_option_name ), '1' ); ?>>
 		<?php
 	}
 
+	/**
+	 * Render the word count field
+	 */
+	public function render_word_count_field(): void {
+		$this->render_checkbox_field( 'word_count' );
+	}
+
+	/**
+	 * Render the character count field
+	 */
 	public function render_character_count_field(): void {
-		?>
-        <input type="checkbox" name="wcp_character_count"
-               value="1" <?php checked( get_option( 'wcp_character_count' ), '1' ); ?>>
-	<?php }
+		$this->render_checkbox_field( 'character_count' );
+	}
 
+	/**
+	 * Render the read time field
+	 */
 	public function render_read_time_field(): void {
-		?>
-        <input type="checkbox" name="wcp_read_time" value="1" <?php checked( get_option( 'wcp_read_time' ), '1' ); ?>>
-	<?php }
-
-
+		$this->render_checkbox_field( 'read_time' );
+	}
 }
 
 // Initialize the plugin
