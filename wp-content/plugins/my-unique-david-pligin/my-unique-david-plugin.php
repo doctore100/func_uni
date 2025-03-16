@@ -31,9 +31,6 @@ class wordCountUniquePlugin {
 	}
 
 	function settings(): void {
-		/**
-		 * Registers the 'wcp_location' setting and adds a settings field for it.
-		 */
 		register_setting(
 			'wordCountPlugin',
 			'wcp_location',
@@ -43,16 +40,6 @@ class wordCountUniquePlugin {
 				'default'           => '0'
 			)
 		);
-
-		/**
-		 * Adds a settings field for the 'wcp_location' option.
-		 *
-		 * @param string $id The field ID.
-		 * @param string $title The title of the field.
-		 * @param callable $callback Function to generate the field's HTML.
-		 * @param string $page The menu page.
-		 * @param string $section The section on the menu page.
-		 */
 		add_settings_field(
 			'wcp_location',
 			'Display Location',
@@ -62,33 +49,22 @@ class wordCountUniquePlugin {
 		);
 
 
-		/**
-		 * Registers the 'wcp_headline' setting and adds a settings field for it.
-		 */
 		register_setting(
-			'wordCountPlugin',  // The settings group name.
-			'wcp_headline',     // The option name in the database.
+			'wordCountPlugin',
+			'wcp_headline',
 			array(
-				'sanitize_callback' => 'sanitize_text_field', // Callback to sanitize the field input.
-				'default'           => '0'                   // Default value for the setting.
+				$this,
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => '0'
 			)
 		);
 
-		/**
-		 * Adds a settings field for the 'wcp_headline' option.
-		 *
-		 * @param string $id The field ID.
-		 * @param string $title The title of the field displayed in the UI.
-		 * @param callable $callback Function to generate the field's HTML.
-		 * @param string $page The menu page where the settings field is displayed.
-		 * @param string $section The section on the menu page where the field is displayed.
-		 */
 		add_settings_field(
-			'wcp_headline',            // Field ID.
-			'Headline Text',           // Title of the field.
-			array( $this, 'headlineHTML' ), // Callback function to render the field's HTML.
-			'my-unique-david-plugin',  // Page on which to display the field.
-			'wcp_first_section'        // Section to place the field in.
+			'wcp_headline',
+			'Headline Text',
+			array( $this, 'headlineHTML' ),
+			'my-unique-david-plugin',
+			'wcp_first_section'
 		);
 
 		add_settings_section(
