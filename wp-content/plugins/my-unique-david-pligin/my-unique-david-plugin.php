@@ -63,7 +63,7 @@ class Word_Count_Plugin {
 			self::SETTINGS_GROUP,
 			'wcp_location',
 			[
-				'sanitize_callback' => 'sanitize_text_field',
+				'sanitize_callback' => array( $this, 'sanitizeLocation' ),
 				'default'           => '0'
 			]
 		);
@@ -81,7 +81,7 @@ class Word_Count_Plugin {
 			self::SETTINGS_GROUP,
 			'wcp_headline',
 			[
-				'sanitize_callback' => 'sanitize_text_field',
+				'sanitize_callback' => array( $this, 'sanitizeLocation' ),
 				'default'           => 'Post Statistics'
 			]
 		);
@@ -99,7 +99,7 @@ class Word_Count_Plugin {
 			self::SETTINGS_GROUP,
 			'wcp_word_count',
 			[
-				'sanitize_callback' => 'sanitize_text_field',
+				'sanitize_callback' => array( $this, 'sanitizeLocation' ),
 				'default'           => '1'
 			]
 		);
@@ -116,7 +116,7 @@ class Word_Count_Plugin {
 			self::SETTINGS_GROUP,
 			'wcp_character_count',
 			[
-				'sanitize_callback' => 'sanitize_text_field',
+				'sanitize_callback' => array( $this, 'sanitizeLocation' ),
 				'default'           => '1'
 			]
 		);
@@ -132,7 +132,7 @@ class Word_Count_Plugin {
 			self::SETTINGS_GROUP,
 			'wcp_read_time',
 			[
-				'sanitize_callback' => 'sanitize_text_field',
+				'sanitize_callback' => array( $this, "sanitizeLocation" ),
 				'default'           => '1'
 			]
 		);
@@ -144,6 +144,20 @@ class Word_Count_Plugin {
 			'wcp_settings_section'
 		);
 
+	}
+
+	public function sanitizeLocation( $input ) {
+		if ( $input != '0' and $input != '1' ) {
+			add_settings_error(
+				'wcp_location',
+				'wcp_location_error',
+				'Display location must be either beginning or end of post.',
+				'error'
+			);
+
+			return get_option( 'wcp_location' );
+		}
+        return $input;
 	}
 
 	/**
