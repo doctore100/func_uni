@@ -69,7 +69,11 @@ class Word_Count_Plugin {
 	}
 
 	public function create_html( $content ) {
-		return $content . 'casa de papel';
+		$html = '<h3>' . get_option( 'wcp_headline', 'Post Statistics' ) . '</h3><p>';
+		if ( get_option( 'wcp_location', '0' ) == '0' ) {
+			return $html . $content;
+		}
+		return $content . $html;
 	}
 
 	/**
