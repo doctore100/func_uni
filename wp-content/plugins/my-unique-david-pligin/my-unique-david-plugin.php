@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Plugin Fictional University
  * Description: This is my first plugin
- * Author: Ivan David Guzman Ruiz
+ * Author: Iván David Guzmán Ruiz
  * Version: 1.0
  */
 
