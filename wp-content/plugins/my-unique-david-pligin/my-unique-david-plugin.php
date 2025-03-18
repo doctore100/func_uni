@@ -53,9 +53,10 @@ class Word_Count_Plugin {
 	 * @return bool Whether any metrics should be displayed
 	 */
 	private function should_add_word_count_metrics(): bool {
-		return get_option( 'wcp_location', '1' ) ||
-		       get_option( 'wcp_word_count', '1' ) ||
-		       get_option( 'wcp_read_time', '1' );
+		return
+			get_option( 'wcp_character_count', '1' ) ||
+			get_option( 'wcp_word_count', '1' ) ||
+			get_option( 'wcp_read_time', '1' );
 	}
 
 	/**
@@ -170,7 +171,7 @@ class Word_Count_Plugin {
 			self::SETTINGS_GROUP,
 			'wcp_read_time',
 			[
-				'sanitize_callback' =>'sanitize_text_field',
+				'sanitize_callback' => 'sanitize_text_field',
 				'default'           => '1'
 			]
 		);
