@@ -15,12 +15,12 @@ class Word_Count_Plugin {
 	/**
 	 * Plugin slug used for settings
 	 */
-	const PLUGIN_SLUG = 'my-unique-david-plugin';
+	const string PLUGIN_SLUG = 'my-unique-david-plugin';
 
 	/**
 	 * Settings group name
 	 */
-	const SETTINGS_GROUP = 'wordCountPlugin';
+	const string SETTINGS_GROUP = 'wordCountPlugin';
 
 	/**
 	 * Initialize the plugin by setting up hooks
@@ -31,6 +31,44 @@ class Word_Count_Plugin {
 
 		// Register settings
 		add_action( 'admin_init', [ $this, 'register_settings' ] );
+
+		// Add filter
+		add_filter( 'the_content', [ $this, 'is_wrap' ] );
+	}
+
+	/**
+	 * Filter function
+	 */
+	public function is_wrap( $content ) {
+		if ( $this->should_add_word_count_metrics() && $this->is_valid_display_context() ) {
+			return $this->create_html( $content );
+		}
+
+		return $content;
+	}
+
+	/**
+	 * Checks if any word count metrics are enabled in the settings
+	 *
+	 * @return bool Whether any metrics should be displayed
+	 */
+	private function should_add_word_count_metrics(): bool {
+		return get_option( 'wcp_location', '1' ) ||
+		       get_option( 'wcp_word_count', '1' ) ||
+		       get_option( 'wcp_read_time', '1' );
+	}
+
+	/**
+	 * Determines if the current context is appropriate for displaying metrics
+	 *
+	 * @return bool Whether the current page context is valid for displaying metrics
+	 */
+	private function is_valid_display_context(): bool {
+		return is_single() && is_main_query();
+	}
+
+	public function create_html( $content ) {
+		return $content . 'casa de papel';
 	}
 
 	/**
@@ -63,7 +101,7 @@ class Word_Count_Plugin {
 			self::SETTINGS_GROUP,
 			'wcp_location',
 			[
-				'sanitize_callback' => array( $this, 'sanitizeLocation' ),
+				'sanitize_callback' => [ $this, 'sanitizeLocation' ],
 				'default'           => '0'
 			]
 		);
@@ -81,7 +119,7 @@ class Word_Count_Plugin {
 			self::SETTINGS_GROUP,
 			'wcp_headline',
 			[
-				'sanitize_callback' => array( $this, 'sanitizeLocation' ),
+				'sanitize_callback' => 'sanitize_text_field',
 				'default'           => 'Post Statistics'
 			]
 		);
@@ -99,7 +137,7 @@ class Word_Count_Plugin {
 			self::SETTINGS_GROUP,
 			'wcp_word_count',
 			[
-				'sanitize_callback' => array( $this, 'sanitizeLocation' ),
+				'sanitize_callback' => 'sanitize_text_field',
 				'default'           => '1'
 			]
 		);
@@ -116,7 +154,7 @@ class Word_Count_Plugin {
 			self::SETTINGS_GROUP,
 			'wcp_character_count',
 			[
-				'sanitize_callback' => array( $this, 'sanitizeLocation' ),
+				'sanitize_callback' => 'sanitize_text_field',
 				'default'           => '1'
 			]
 		);
@@ -132,7 +170,7 @@ class Word_Count_Plugin {
 			self::SETTINGS_GROUP,
 			'wcp_read_time',
 			[
-				'sanitize_callback' => array( $this, "sanitizeLocation" ),
+				'sanitize_callback' =>'sanitize_text_field',
 				'default'           => '1'
 			]
 		);
@@ -152,12 +190,12 @@ class Word_Count_Plugin {
 				'wcp_location',
 				'wcp_location_error',
 				'Display location must be either beginning or end of post.',
-				'error'
 			);
 
 			return get_option( 'wcp_location' );
 		}
-        return $input;
+
+		return $input;
 	}
 
 	/**
@@ -183,10 +221,12 @@ class Word_Count_Plugin {
 	 */
 	public function render_location_field(): void {
 		?>
-        <select name="wcp_location">
-            <option value="0" <?php selected( get_option( 'wcp_location' ), '0' ); ?>>Beginning of Post</option>
-            <option value="1" <?php selected( get_option( 'wcp_location' ), '1' ); ?>>End of Post</option>
-        </select>
+        <label>
+            <select name="wcp_location">
+                <option value="0" <?php selected( get_option( 'wcp_location' ), '0' ); ?>>Beginning of Post</option>
+                <option value="1" <?php selected( get_option( 'wcp_location' ), '1' ); ?>>End of Post</option>
+            </select>
+        </label>
 		<?php
 	}
 
@@ -195,7 +235,9 @@ class Word_Count_Plugin {
 	 */
 	public function render_headline_field(): void {
 		?>
-        <input type="text" name="wcp_headline" value="<?php echo esc_attr( get_option( 'wcp_headline' ) ); ?>">
+        <label>
+            <input type="text" name="wcp_headline" value="<?php echo esc_attr( get_option( 'wcp_headline' ) ) ?>">
+        </label>
 		<?php
 	}
 
@@ -207,8 +249,10 @@ class Word_Count_Plugin {
 	private function render_checkbox_field( string $option_name ): void {
 		$full_option_name = "wcp_{$option_name}";
 		?>
-        <input type="checkbox" name="<?php echo esc_attr( $full_option_name ); ?>"
-               value="1" <?php checked( get_option( $full_option_name ), '1' ); ?>>
+        <label>
+            <input type="checkbox" name="<?php echo esc_attr( $full_option_name ); ?>"
+                   value="1" <?php checked( get_option( $full_option_name ), '1' ); ?>>
+        </label>
 		<?php
 	}
 
