@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Plugin Fictional University
- * Description: This is my first plugin
+ * Description: This is my first plugin joder
  * Author: Iván David Guzmán Ruiz
  * Version: 1.0
  */
@@ -34,7 +34,41 @@ class Word_Count_Plugin {
 
 		// Add filter
 		add_filter( 'the_content', [ $this, 'is_wrap' ] );
+		add_action( 'update_option_wcp_location', [ $this, 'clean_cache_after_location_change' ], 10, 2 );
+
 	}
+    public function clean_cache_after_location_change( $old_value, $new_value ): void {
+	    if ($old_value !== $new_value) {
+		    // Clear the cache for the specific option
+		    wp_cache_delete('wcp_location', 'options');
+
+		    // Clear the cache of transients that might contain affected content
+		    delete_transient('wcp_cached_content');
+
+		    // Clear full page cache of popular plugins
+
+		    // W3 Total Cache
+		    if (function_exists('w3tc_flush_posts')) {
+			    w3tc_flush_posts();
+		    }
+
+		    // WP Super Cache
+		    if (function_exists('wp_cache_clear_cache')) {
+			    wp_cache_clear_cache();
+		    }
+
+		    // WP Rocket
+		    if (function_exists('rocket_clean_domain')) {
+			    rocket_clean_domain();
+		    }
+
+		    // LiteSpeed Cache
+		    if (class_exists('LiteSpeed_Cache_API') && method_exists('LiteSpeed_Cache_API', 'purge_all')) {
+			    LiteSpeed_Cache_API::purge_all();
+		    }
+	    }
+
+    }
 
 	/**
 	 * Filter function
@@ -68,12 +102,56 @@ class Word_Count_Plugin {
 		return is_single() && is_main_query();
 	}
 
-	public function create_html( $content ) {
-		$html = '<h3>' . get_option( 'wcp_headline', 'Post Statistics' ) . '</h3><p>';
-		if ( get_option( 'wcp_location', '0' ) == '0' ) {
-			return $html . $content;
+	/**
+	 * Create the HTML output for word count statistics
+	 *
+	 * @param string $content The post content
+	 *
+	 * @return string Modified content with statistics
+	 */
+	public function create_html( $content ): string {
+		// Initialize statistics HTML
+		$stats_html = '<h3>' . esc_html( get_option( 'wcp_headline', 'Post Statistics' ) ) . '</h3><p>';
+
+		// Calculate word count only if needed
+		$word_count = null;
+		if ( get_option( 'wcp_word_count', '1' ) || get_option( 'wcp_read_time', '1' ) ) {
+			$word_count = str_word_count( strip_tags( $content ) );
 		}
-		return $content . $html;
+
+		// Add word count if enabled
+		if ( get_option( 'wcp_word_count', '1' ) ) {
+			$stats_html .= 'This post has: ' . number_format( $word_count ) . ' words.<br>';
+		}
+
+		// Add character count if enabled
+		if ( get_option( 'wcp_character_count', '1' ) ) {
+			$char_count = strlen( strip_tags( $content ) );
+			$stats_html .= 'This post has: ' . number_format( $char_count ) . ' characters.<br>';
+		}
+
+		// Add reading time if enabled
+		if ( get_option( 'wcp_read_time', '1' ) && $word_count ) {
+			// Average reading speed is about 225 words per minute
+			$minutes     = ceil( $word_count / 225 );
+			$time_string = $minutes === 1 ? 'minute' : 'minutes';
+			$stats_html  .= 'Estimated reading time: ' . $minutes . ' ' . $time_string . '.<br>';
+		}
+
+		// Close paragraph tag
+		$stats_html .= '</p>';
+
+		// Handle different location settings
+		$location = get_option( 'wcp_location', '0' );
+
+		// 0 = after content, 1 = before content, 2 = both before and after
+		if ( $location === '1' ) {
+			return $content . $stats_html;
+		} elseif ( $location === '0' ) {
+			return $stats_html . $content;
+		} else {
+			return $stats_html . $content . $stats_html;
+		}
 	}
 
 	/**
