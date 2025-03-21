@@ -13,8 +13,10 @@ if (!defined('ABSPATH')) {
 
 class Our_Word_Filter_Plugin {
 	// Class constants for menu slugs
-	const PLUGIN_SLUG = 'our-word-filter';
-	const PLUGIN_SLUG_OPTIONS = 'our-word-filter-options';
+	const string PLUGIN_SLUG = 'our-word-filter';
+	const string PLUGIN_SLUG_OPTIONS = 'our-word-filter-options';
+    const string SVG_ICON = 'dashicons-smiley';
+
 
 	/**
 	 * Constructor - initialize hooks
@@ -38,7 +40,7 @@ class Our_Word_Filter_Plugin {
 			'manage_options',            // Capability required
 			self::PLUGIN_SLUG,           // Menu slug
 			[$this, 'render_main_page'], // Callback function
-			'dashicons-smiley',          // Icon
+			self::SVG_ICON,          // Icon
 			100                          // Position
 		);
 
