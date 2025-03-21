@@ -1,9 +1,11 @@
 <?php
 /**
  * Plugin Name: Plugin Fictional University
- * Description: This is my first plugin joder
+ * Description: This is my first plugin
  * Author: Iván David Guzmán Ruiz
  * Version: 1.0
+ * Text Domain: domaindavid
+ * Domain Path: /languages
  */
 
 /**
@@ -35,40 +37,46 @@ class Word_Count_Plugin {
 		// Add filter
 		add_filter( 'the_content', [ $this, 'is_wrap' ] );
 		add_action( 'update_option_wcp_location', [ $this, 'clean_cache_after_location_change' ], 10, 2 );
+		add_action( 'init', [ $this, 'language_support' ] );
 
 	}
-    public function clean_cache_after_location_change( $old_value, $new_value ): void {
-	    if ($old_value !== $new_value) {
-		    // Clear the cache for the specific option
-		    wp_cache_delete('wcp_location', 'options');
 
-		    // Clear the cache of transients that might contain affected content
-		    delete_transient('wcp_cached_content');
+	public function language_support(): void {
+		load_plugin_textdomain( 'domaindavid', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+	}
 
-		    // Clear full page cache of popular plugins
+	public function clean_cache_after_location_change( $old_value, $new_value ): void {
+		if ( $old_value !== $new_value ) {
+			// Clear the cache for the specific option
+			wp_cache_delete( 'wcp_location', 'options' );
 
-		    // W3 Total Cache
-		    if (function_exists('w3tc_flush_posts')) {
-			    w3tc_flush_posts();
-		    }
+			// Clear the cache of transients that might contain affected content
+			delete_transient( 'wcp_cached_content' );
 
-		    // WP Super Cache
-		    if (function_exists('wp_cache_clear_cache')) {
-			    wp_cache_clear_cache();
-		    }
+			// Clear full page cache of popular plugins
 
-		    // WP Rocket
-		    if (function_exists('rocket_clean_domain')) {
-			    rocket_clean_domain();
-		    }
+			// W3 Total Cache
+			if ( function_exists( 'w3tc_flush_posts' ) ) {
+				w3tc_flush_posts();
+			}
 
-		    // LiteSpeed Cache
-		    if (class_exists('LiteSpeed_Cache_API') && method_exists('LiteSpeed_Cache_API', 'purge_all')) {
-			    LiteSpeed_Cache_API::purge_all();
-		    }
-	    }
+			// WP Super Cache
+			if ( function_exists( 'wp_cache_clear_cache' ) ) {
+				wp_cache_clear_cache();
+			}
 
-    }
+			// WP Rocket
+			if ( function_exists( 'rocket_clean_domain' ) ) {
+				rocket_clean_domain();
+			}
+
+			// LiteSpeed Cache
+			if ( class_exists( 'LiteSpeed_Cache_API' ) && method_exists( 'LiteSpeed_Cache_API', 'purge_all' ) ) {
+				LiteSpeed_Cache_API::purge_all();
+			}
+		}
+
+	}
 
 	/**
 	 * Filter function
@@ -121,7 +129,7 @@ class Word_Count_Plugin {
 
 		// Add word count if enabled
 		if ( get_option( 'wcp_word_count', '1' ) ) {
-			$stats_html .= 'This post has: ' . number_format( $word_count ) . ' words.<br>';
+			$stats_html .= esc_html__( 'This post has:', 'domaindavid' ) . ' ' . number_format( $word_count ) . ' ' . esc_html__( 'words.', 'domaindavid' ) . '<br>';
 		}
 
 		// Add character count if enabled
@@ -159,8 +167,8 @@ class Word_Count_Plugin {
 	 */
 	public function register_admin_page(): void {
 		add_options_page(
-			'Word Count Settings',  // Page title
-			'Word Count',          // Menu title
+			esc_html__( 'Word Count Settings', 'domaindavid' ),  // Page title
+			esc_html__( 'Word Count', 'domaindavid' ),          // Menu title
 			'manage_options',      // Capability
 			self::PLUGIN_SLUG,     // Menu slug
 			[ $this, 'render_admin_page' ] // Callback
