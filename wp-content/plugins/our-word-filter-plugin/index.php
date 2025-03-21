@@ -7,3 +7,4 @@
  * Text Domain: domaindavid
  * Domain Path: /languages
  */
+if ( ! defined( 'ABSPATH' ) ) exit;
