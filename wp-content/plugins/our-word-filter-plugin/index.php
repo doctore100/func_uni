@@ -15,7 +15,7 @@ class Our_Word_Filter_Plugin {
 	// Class constants for menu slugs
 	const string PLUGIN_SLUG = 'our-word-filter';
 	const string PLUGIN_SLUG_OPTIONS = 'our-word-filter-options';
-    // Size icon 20x20 px
+	// Size icon 20x20 px
 	const string SVG_ICON = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMCAyMEMxNS41MjI5IDIwIDIwIDE1LjUyMjkgMjAgMTBDMjAgNC40NzcxNCAxNS41MjI5IDAgMTAgMEM0LjQ3NzE0IDAgMCA0LjQ3NzE0IDAgMTBDMCAxNS41MjI5IDQuNDc3MTQgMjAgMTAgMjBaTTExLjk5IDcuNDQ2NjZMMTAuMDc4MSAxLjU2MjVMOC4xNjYyNiA3LjQ0NjY2SDEuOTc5MjhMNi45ODQ2NSAxMS4wODMzTDUuMDcyNzUgMTYuOTY3NEwxMC4wNzgxIDEzLjMzMDhMMTUuMDgzNSAxNi45Njc0TDEzLjE3MTYgMTEuMDgzM0wxOC4xNzcgNy40NDY2NkgxMS45OVoiIGZpbGw9IiNGRkRGOEQiLz4KPC9zdmc+';
 
 
@@ -35,7 +35,8 @@ class Our_Word_Filter_Plugin {
 	 */
 	public function register_admin_menu(): void {
 		// Add main menu page
-		add_menu_page(
+
+		$main_page_hook = add_menu_page(
 			'Our Word Filter',           // Page title
 			'Our Word Filter',           // Menu title
 			'manage_options',            // Capability required
@@ -64,6 +65,7 @@ class Our_Word_Filter_Plugin {
 			self::PLUGIN_SLUG_OPTIONS,        // Menu slug
 			[ $this, 'render_options_page' ]    // Callback function
 		);
+		add_action( "load-{$main_page_hook}", [ $this, 'render_main_page_assets' ] );
 	}
 
 	/**
@@ -71,10 +73,18 @@ class Our_Word_Filter_Plugin {
 	 */
 	public function render_main_page(): void {
 		?>
-        <div class="wrap">
-            <h1>Our Word Filter</h1>
-            <p>This is my second plugin, which is a plugin that uses JavaScript and PHP to create a dynamic filter.</p>
-        </div>
+        <section>
+            <h1> Word Filter</h1>
+            <form method="post">
+                <label for="plugin_word_to_filter">Enter <strong>separate by coma</strong> the word you want to
+                    fiend</label>
+                <div class="word-filter_flex-container">
+                    <textarea name="plugin_word_to_filter" id="plugin_word_to_filter"
+                              placeholder="main, bock, teacher"></textarea>
+                </div>
+                <input type="submit" value="Save Changes" id="submit" class="button button-primary">
+            </form>
+        </section>
 		<?php
 	}
 
