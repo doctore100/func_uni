@@ -312,12 +312,12 @@ class Word_Count_Plugin {
 	 */
 	public function render_location_field(): void {
 		?>
-        <label>
-            <select name="wcp_location">
-                <option value="0" <?php selected( get_option( 'wcp_location' ), '0' ); ?>>Beginning of Post</option>
-                <option value="1" <?php selected( get_option( 'wcp_location' ), '1' ); ?>>End of Post</option>
-            </select>
-        </label>
+            <label for="location_text"></label>
+                <select name="wcp_location" id="location_text">
+                    <option value="0" <?php selected( get_option( 'wcp_location' ), '0' ); ?>>Beginning of Post</option>
+                    <option value="1" <?php selected( get_option( 'wcp_location' ), '1' ); ?>>End of Post</option>
+                </select>
+
 		<?php
 	}
 
@@ -326,9 +326,10 @@ class Word_Count_Plugin {
 	 */
 	public function render_headline_field(): void {
 		?>
-        <label>
-            <input type="text" name="wcp_headline" value="<?php echo esc_attr( get_option( 'wcp_headline' ) ) ?>">
-        </label>
+        <label for="location_headline"></label>
+        <input type="text" name="wcp_headline" id="location_headline"
+               value="<?php echo esc_attr( get_option( 'wcp_headline' ) ) ?>">
+
 		<?php
 	}
 
@@ -340,10 +341,10 @@ class Word_Count_Plugin {
 	private function render_checkbox_field( string $option_name ): void {
 		$full_option_name = "wcp_{$option_name}";
 		?>
-        <label>
-            <input type="checkbox" name="<?php echo esc_attr( $full_option_name ); ?>"
+        <label for="feat_select"></label>
+            <input type="checkbox" id="feat_select" name="<?php echo esc_attr( $full_option_name ); ?>"
                    value="1" <?php checked( get_option( $full_option_name ), '1' ); ?>>
-        </label>
+
 		<?php
 	}
 
