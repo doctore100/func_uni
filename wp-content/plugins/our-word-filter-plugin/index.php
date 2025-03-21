@@ -68,6 +68,10 @@ class Our_Word_Filter_Plugin {
 		add_action( "load-{$main_page_hook}", [ $this, 'render_main_page_assets' ] );
 	}
 
+	public function render_main_page_assets(): void {
+		wp_enqueue_style( 'filter_admin_css', plugins_url( __FILE__ . "css/admin.css" ) );
+	}
+
 	/**
 	 * Render the main plugin page
 	 */
