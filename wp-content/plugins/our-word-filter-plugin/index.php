@@ -15,6 +15,7 @@ class Our_Word_Filter_Plugin {
 	// Class constants for menu slugs
 	const string PLUGIN_SLUG = 'our-word-filter';
 	const string PLUGIN_SLUG_OPTIONS = 'our-word-filter-options';
+    // Size icon 20x20 px
 	const string SVG_ICON = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMCAyMEMxNS41MjI5IDIwIDIwIDE1LjUyMjkgMjAgMTBDMjAgNC40NzcxNCAxNS41MjI5IDAgMTAgMEM0LjQ3NzE0IDAgMCA0LjQ3NzE0IDAgMTBDMCAxNS41MjI5IDQuNDc3MTQgMjAgMTAgMjBaTTExLjk5IDcuNDQ2NjZMMTAuMDc4MSAxLjU2MjVMOC4xNjYyNiA3LjQ0NjY2SDEuOTc5MjhMNi45ODQ2NSAxMS4wODMzTDUuMDcyNzUgMTYuOTY3NEwxMC4wNzgxIDEzLjMzMDhMMTUuMDgzNSAxNi45Njc0TDEzLjE3MTYgMTEuMDgzM0wxOC4xNzcgNy40NDY2NkgxMS45OVoiIGZpbGw9IiNGRkRGOEQiLz4KPC9zdmc+';
 
 
@@ -47,11 +48,11 @@ class Our_Word_Filter_Plugin {
 		// Add submenu page
 		add_submenu_page(
 			self::PLUGIN_SLUG,                // Parent slug
-			'Our Word Filter Options',        // Page title
-			'Options',                        // Menu title
+			'Word to Filter',        // Page title
+			'Word List',                        // Menu title
 			'manage_options',                 // Capability required
 			self::PLUGIN_SLUG_OPTIONS,        // Menu slug
-			[ $this, 'render_options_page' ]    // Callback function
+			[ $this, 'render_main_page' ]    // Callback function
 		);
 
 		// Add submenu page
