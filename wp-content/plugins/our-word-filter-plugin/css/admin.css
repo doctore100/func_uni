@@ -1,0 +1,7 @@
+.word-filter_flex-container {
+    display: flex;
+}
+.word-filter_flex-container textarea {
+    flex: 1;
+    margin-bottom: 20px;
+}

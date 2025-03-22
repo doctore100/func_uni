@@ -69,7 +69,7 @@ class Our_Word_Filter_Plugin {
 	}
 
 	public function render_main_page_assets(): void {
-		wp_enqueue_style( 'filter_admin_css', plugins_url( __FILE__ . "css/admin.css" ) );
+		wp_enqueue_style( 'filterAdminCss', plugin_dir_url( __FILE__ ) . "css/admin.css" );
 	}
 
 	/**
@@ -79,7 +79,15 @@ class Our_Word_Filter_Plugin {
 		?>
         <section>
             <h1> Word Filter</h1>
+			<?php
+			$is_form_submitted = isset( $_POST['form_submitted'] ) && $_POST['form_submitted'] === 'true';
+			if ( $is_form_submitted ) {
+				echo "<p class='notice notice-success'>Thank you for your submission!</p>";
+			}
+			?>
+            <p>This is the main page of the plugin</p>
             <form method="post">
+                <input type="hidden" name="form_submitted" value="true">
                 <label for="plugin_word_to_filter">Enter <strong>separate by coma</strong> the word you want to
                     fiend</label>
                 <div class="word-filter_flex-container">
