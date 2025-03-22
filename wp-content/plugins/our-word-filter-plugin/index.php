@@ -70,13 +70,14 @@ class Our_Word_Filter_Plugin {
 		<?php
 	}
 
-	public function filter_logic( $content ): array|string {
+
+	public function filter_logic( $content ): string {
 		$bad_words = explode( ',', get_option( 'plugin_word_to_filter' ) );
 		$bad_words_trim = array_map( 'trim', $bad_words );
-		return str_ireplace( $bad_words_trim, '***', $content );
-
-
+		$replacement = esc_html( get_option( "replace-text", "***" ) );
+		return str_ireplace( $bad_words_trim, $replacement, $content );
 	}
+
 
 	/**
 	 * Register the main menu and submenu pages
@@ -120,7 +121,7 @@ class Our_Word_Filter_Plugin {
 		wp_enqueue_style( 'filterAdminCss', plugin_dir_url( __FILE__ ) . "css/admin.css" );
 	}
 
-	public function handle_submit() {
+	public function handle_submit(): void {
 		if ( wp_verify_nonce( $_POST['plugin_word_filter_nonce'], 'plugin_word_filter_action' ) && current_user_can( 'manage_options' ) ) {
 			update_option( 'plugin_word_to_filter', sanitize_text_field( trim( $_POST['plugin_word_to_filter'] ) ) ); ?>
             <div class="updated">
@@ -176,12 +177,12 @@ class Our_Word_Filter_Plugin {
             <div class="warp">
                 <h1>Word Filter Options</h1>
                 <p>Configure your word filter options here.</p>
-                <form action="options.pho" method="post">
+                <form action="options.php" method="post">
 					<?php
-
+					settings_fields( 'replace-field' );
+					do_settings_sections( self::PLUGIN_SLUG_OPTIONS );
 					submit_button(); ?>
-                    <?php settings_fields( 'replace-field' ); ?>
-                    <?php do_settings_sections( self::PLUGIN_SLUG_OPTIONS ); ?>
+
                 </form>
 
             </div>
