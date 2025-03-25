@@ -30,8 +30,37 @@ class Our_Word_Filter_Plugin {
 		if ( get_option( 'plugin_word_to_filter' ) ) {
 			add_filter( 'the_content', [ $this, 'filter_logic' ] );
 		}
+		add_action( 'update_option_wcp_location', [ $this, 'clean_cache_after_location_change' ], 10, 2 );
 
 
+	}
+
+	public function clean_cache_after_location_change( $old_value, $new_value ): void {
+		if ( $old_value !== $new_value ) {
+
+
+			// Clear full page cache of popular plugins
+
+			// W3 Total Cache
+			if ( function_exists( 'w3tc_flush_posts' ) ) {
+				w3tc_flush_posts();
+			}
+
+			// WP Super Cache
+			if ( function_exists( 'wp_cache_clear_cache' ) ) {
+				wp_cache_clear_cache();
+			}
+
+			// WP Rocket
+			if ( function_exists( 'rocket_clean_domain' ) ) {
+				rocket_clean_domain();
+			}
+
+			// LiteSpeed Cache
+			if ( class_exists( 'LiteSpeed_Cache_API' ) && method_exists( 'LiteSpeed_Cache_API', 'purge_all' ) ) {
+				LiteSpeed_Cache_API::purge_all();
+			}
+		}
 	}
 
 	/**
@@ -90,7 +119,7 @@ class Our_Word_Filter_Plugin {
 			'Our Word Filter',           // Menu title
 			'manage_options',            // Capability required
 			self::PLUGIN_SLUG,           // Menu slug
-			[ $this, 'render_main_page' ], // Callback function
+			[ $this, 'render_main_page' ],      // Callback function
 			self::SVG_ICON,          // Icon
 			100                          // Position
 		);
@@ -154,7 +183,7 @@ class Our_Word_Filter_Plugin {
 
 				<?php wp_nonce_field( 'plugin_word_filter_action', 'plugin_word_filter_nonce' ); ?>
                 <label for="plugin_word_to_filter">
-                    Enter <strong>separate by coma</strong> the word you want to fiend
+                    Enter <strong>separate by a coma</strong> the word you want to fiend
                 </label>
                 <div class="word-filter_flex-container">
                     <textarea name="plugin_word_to_filter" id="plugin_word_to_filter"
@@ -173,7 +202,7 @@ class Our_Word_Filter_Plugin {
 		?>
         <div class="wrap">
 
-            <!-- Options form would go here -->
+            <!-- Option form would go here -->
             <div class="warp">
                 <h1>Word Filter Options</h1>
                 <p>Configure your word filter options here.</p>
