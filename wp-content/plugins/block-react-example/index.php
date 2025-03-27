@@ -13,17 +13,28 @@ if ( !defined( 'ABSPATH' ) ) {
 
 class Block_React_Example {
 	function __construct() {
-		add_action('init', array($this, 'admin_assets'));
+		add_action( 'init', array( $this, 'admin_assets' ) );
 	}
-	public function admin_assets(): void {
-		wp_register_script( 'block-react-example-block', plugin_dir_url(__FILE__ ). 'build/index.js', ['wp-blocks', 'wp-element'],  );
-		register_block_type('block-example/block-react-example', [
+
+	public function admin_assets(): void{
+		wp_register_style( 'edit-css', plugin_dir_url( __FILE__ ) . 'build/index.css' );
+		wp_register_script( 'block-react-example-block', plugin_dir_url( __FILE__ ) . 'build/index.js', [
+			'wp-blocks',
+			'wp-element',
+			'wp-editor',
+			'wp-components',  // Consider adding this
+			'wp-block-editor' // Modern replacement for wp-editor
+		] );
+		register_block_type( 'block-example/block-react-example', [
+			'editor_style' => 'edit-css',
 			'editor_script' => 'block-react-example-block',
-			'render_callback' => [$this, 'render_block']
-		]);
+			'render_callback' => [ $this, 'render_block' ]
+		] );
 	}
-	public function render_block($attributes): string{
-		return '<h1>The sky is ' . $attributes['skyColor'] . 'and the grass is ' . $attributes['grassColor']. 'color </h1>';
+
+	public function render_block( $attributes ): string {
+		return '<p>The sky is ' . $attributes['skyColor'] . 'and the grass is ' . $attributes['grassColor'] . 'color </p>';
 	}
 }
+
 $block_react_example = new Block_React_Example();
