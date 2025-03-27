@@ -1,34 +1,55 @@
+import './index.scss'
+import {TextControl, Flex, FlexBlock, FlexItem, Button, Icon} from '@wordpress/components';
+
 const attributes = {
-    skyColor: {
+    question: {
         type: 'string',
     },
-    grassColor: {
-        type: 'string',
+    answer: {
+        type: 'array',
+        default: [""]
     }
+
 };
+
+function EditComponent() {
+    return function (props) {
+
+        function updateQuestion(value) {
+            props.setAttributes({question: value})
+        }
+        return (
+            <div className="block-react-example">
+                <TextControl label="Questions ??" value={props.attributes.question} onChange={updateQuestion} style={{fontSize: '20px'}}/>
+                <p style={{fontSize: '13px', margin: "20px 0 8px 0"}}>Answer:</p>
+                <Flex>
+                    <FlexBlock>
+                        <TextControl></TextControl>
+                    </FlexBlock>
+                    <FlexItem>
+                        <Button>
+                            <Icon className="mark-as-correct" icon="star-empty"/>
+                        </Button>
+                    </FlexItem>
+                    <FlexItem>
+                        <Button isLink className="attention-delete">
+                            Delete
+                        </Button>
+                    </FlexItem>
+                </Flex>
+                <Button isPrimary> Add another answer </Button>
+
+            </div>
+        )
+    };
+}
+
 wp.blocks.registerBlockType('block-example/block-react-example', {
     title: 'Block React Example',
     icon: 'smiley',
     category: 'common',
     attributes: attributes,
-    edit: function (props) {
-        function updateSkyColor(e) {
-            props.setAttributes({skyColor: e.target.value})
-        }
-
-        function updateGrassColor(e) {
-            props.setAttributes({grassColor: e.target.value})
-        }
-
-        return (
-            <div>
-                <input type="text" placeholder="Color of the sky" value={props.attributes.skyColor}
-                       onChange={updateSkyColor}></input>
-                <input type="text" placeholder="Color of the grass" value={props.attributes.grassColor}
-                       onChange={updateGrassColor}></input>
-            </div>
-        )
-    },
+    edit: EditComponent(),
     save: function () {
         return null
     },
