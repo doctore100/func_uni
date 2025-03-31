@@ -1,4 +1,4 @@
-import './index.scss'
+import './styles/index.scss'
 import {TextControl, Flex, FlexBlock, FlexItem, Button, Icon} from '@wordpress/components';
 
 
