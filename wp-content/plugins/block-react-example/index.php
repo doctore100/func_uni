@@ -41,7 +41,20 @@ class Block_React_Example {
 	}
 
 	public function render_block( $attributes ): string {
-		return '<p>The sky is ' . $attributes['skyColor'] . 'and the grass is ' . $attributes['grassColor'] . 'color </p>';
+
+		wp_enqueue_script(
+			'FrontEndScript',
+			plugin_dir_url( __FILE__ ) . 'build/FrontEnd.js',
+			[ 'wp-element' ],
+		);
+		wp_enqueue_style(
+			'FrontEndStyles',
+			plugin_dir_url( __FILE__ ) . 'build/FrontEnd.css'
+		);
+
+		ob_start(); ?>
+        <div class="paying-attention-me"></div>
+		<?php return ob_get_clean();
 	}
 }
 
