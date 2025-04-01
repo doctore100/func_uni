@@ -1,4 +1,4 @@
-import {createRoot} from '@wordpress/element';
+import {createRoot, useState} from '@wordpress/element';
 import './styles/frontend.scss';
 // Get all elements with the class
 const divsToUpdate = document.querySelectorAll('.paying-attention-me');
@@ -12,6 +12,7 @@ divsToUpdate.forEach(div => {
 });
 
 function Quiz(props) {
+    const [isCorrect, setIsCorrect] = useState(false);
     function handleAnswer(index) {
         if (props.correctAnswer === index) {
             alert('Correcto!');
