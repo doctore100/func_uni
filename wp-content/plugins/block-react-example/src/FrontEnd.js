@@ -5,8 +5,8 @@ const divsToUpdate = document.querySelectorAll('.paying-attention-me');
 
 // Loop through each element
 divsToUpdate.forEach(div => {
-    const root = createRoot(div); // Create a root for each individual div
-    root.render(<Quiz />);        // Render the Quiz component in this root
+    // const root = createRoot(div); // Create a root for each individual div
+    // root.render(<Quiz />);        // Render the Quiz component in this root
     div.classList.remove('paying-attention-me');
 });
 

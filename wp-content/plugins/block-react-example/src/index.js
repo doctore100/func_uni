@@ -4,10 +4,10 @@ import {TextControl, Flex, FlexBlock, FlexItem, Button, Icon} from '@wordpress/c
 
 const attributes = {
     question: {
-        type: 'string',
+        type: "string",
     },
     answer: {
-        type: 'array',
+        type: "array",
         default: [""]
     },
     correctAnswer: {

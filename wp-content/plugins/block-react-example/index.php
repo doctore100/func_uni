@@ -13,7 +13,10 @@ if ( !defined( 'ABSPATH' ) ) {
 
 class Block_React_Example {
 	function __construct() {
-		add_action( 'init', array( $this, 'admin_assets' ) );
+		add_action(
+                'init',
+                [ $this, 'admin_assets' ]
+        );
 	}
 
 	public function admin_assets(): void {
@@ -41,7 +44,6 @@ class Block_React_Example {
 	}
 
 	public function render_block( $attributes ): string {
-
 		wp_enqueue_script(
 			'FrontEndScript',
 			plugin_dir_url( __FILE__ ) . 'build/FrontEnd.js',
@@ -53,7 +55,9 @@ class Block_React_Example {
 		);
 
 		ob_start(); ?>
-        <div class="paying-attention-me"></div>
+        <div class="paying-attention-me">
+            <pre><?php echo wp_json_encode( $attributes ) ?></pre>
+        </div>
 		<?php return ob_get_clean();
 	}
 }
