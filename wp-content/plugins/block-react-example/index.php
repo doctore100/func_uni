@@ -47,7 +47,7 @@ class Block_React_Example {
 		wp_enqueue_script(
 			'FrontEndScript',
 			plugin_dir_url( __FILE__ ) . 'build/FrontEnd.js',
-			[ 'wp-element' ],
+			[ 'wp-element', 'wp-components' ],
 		);
 		wp_enqueue_style(
 			'FrontEndStyles',
@@ -56,7 +56,7 @@ class Block_React_Example {
 
 		ob_start(); ?>
         <div class="paying-attention-me">
-            <pre><?php echo wp_json_encode( $attributes ) ?></pre>
+            <pre style="display: none"><?php echo wp_json_encode( $attributes ) ?></pre>
         </div>
 		<?php return ob_get_clean();
 	}
