@@ -51,7 +51,8 @@ class Block_React_Example {
 		);
 		wp_enqueue_style(
 			'FrontEndStyles',
-			plugin_dir_url( __FILE__ ) . 'build/FrontEnd.css'
+			plugin_dir_url( __FILE__ ) . 'build/FrontEnd.css',
+            [ 'wp-element', 'react-jsx-runtime', 'wp-components']
 		);
 
 		ob_start(); ?>

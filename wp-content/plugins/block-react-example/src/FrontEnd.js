@@ -1,4 +1,4 @@
-import {createRoot, useState} from '@wordpress/element';
+import {createRoot, useState, useEffects} from '@wordpress/element';
 import './styles/frontend.scss';
 // Get all elements with the class
 const divsToUpdate = document.querySelectorAll('.paying-attention-me');
@@ -12,12 +12,20 @@ divsToUpdate.forEach(div => {
 });
 
 function Quiz(props) {
-    const [isCorrect, setIsCorrect] = useState(false);
+    const [isCorrect, setIsCorrect] = useState(undefined);
+    useEffects(() => {
+        if (isCorrect === false) return;
+        setTimeout(() => {
+            setIsCorrect(undefined);
+        }, 2600
+        )
+    }, [isCorrect])
+
     function handleAnswer(index) {
         if (props.correctAnswer === index) {
-            alert('Correcto!');
+            setIsCorrect(true);
         } else {
-            alert('Incorrecto!');
+            setIsCorrect(false);
         }
     }
 
@@ -27,7 +35,7 @@ function Quiz(props) {
             <ul>
                 {props.answer.map((ans, index) => (<li onClick={() => handleAnswer(index)} key={index}>{ans}</li>))}
             </ul>
-            <div className="correct-message correct-message--visible">
+            <div className={"correct-message" + (isCorrect ? " correct-message--visible" : "")}>
                 <svg xmlns="http://www.w3.org/2000/svg"
                      width="24"
                      height="24"
@@ -40,7 +48,7 @@ function Quiz(props) {
                 </svg>
                 <p> Great the correct answer is: {props.answer[props.correctAnswer]}</p>
             </div>
-            <div className="incorrect-message incorrect-message--visible">
+            <div className={"incorrect-message" + (isCorrect ? "" : " incorrect-message--visible")}>
                 <svg xmlns="http://www.w3.org/2000/svg"
                      width="24"
                      height="24"
