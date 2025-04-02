@@ -1,24 +1,24 @@
-import {createRoot, useState, useEffects} from '@wordpress/element';
-import './styles/frontend.scss';
+import {createRoot, useState, useEffect} from '@wordpress/element';
+import './styles/frontend.scss'
 // Get all elements with the class
 const divsToUpdate = document.querySelectorAll('.paying-attention-me');
 
 // Loop through each element
 divsToUpdate.forEach(div => {
     const data = JSON.parse(div.querySelector('pre').innerHTML)
-    const root = createRoot(div); // Create a root for each individual div
-    root.render(<Quiz {...data}/>);        // Render the Quiz component in this root
+    const root = createRoot(div);          // Create a root for each individual div
+    root.render(<Quiz {...data}/>);       // Render the Quiz component in this root
     div.classList.remove('paying-attention-me');
 });
 
 function Quiz(props) {
     const [isCorrect, setIsCorrect] = useState(undefined);
-    useEffects(() => {
-        if (isCorrect === false) return;
-        setTimeout(() => {
-            setIsCorrect(undefined);
-        }, 2600
-        )
+    useEffect(() => {
+        if (isCorrect === false) {
+            setTimeout(() => {
+                setIsCorrect(undefined)
+            }, 2600)
+        }
     }, [isCorrect])
 
     function handleAnswer(index) {
@@ -33,9 +33,9 @@ function Quiz(props) {
         <div className="paying-attention-frontend">
             <p>{props.question}</p>
             <ul>
-                {props.answer.map((ans, index) => (<li onClick={() => handleAnswer(index)} key={index}>{ans}</li>))}
+                {props.answer.map((ans, index) => (<li onClick={isCorrect === true ? undefined : () => handleAnswer(index)} key={index}>{ans}</li>))}
             </ul>
-            <div className={"correct-message" + (isCorrect ? " correct-message--visible" : "")}>
+            <div className={"correct-message" + (isCorrect===true ? " correct-message--visible" : "")}>
                 <svg xmlns="http://www.w3.org/2000/svg"
                      width="24"
                      height="24"
@@ -48,7 +48,7 @@ function Quiz(props) {
                 </svg>
                 <p> Great the correct answer is: {props.answer[props.correctAnswer]}</p>
             </div>
-            <div className={"incorrect-message" + (isCorrect ? "" : " incorrect-message--visible")}>
+            <div className={"incorrect-message" + (isCorrect===false ? " incorrect-message--visible": "")}>
                 <svg xmlns="http://www.w3.org/2000/svg"
                      width="24"
                      height="24"
