@@ -13,11 +13,17 @@ divsToUpdate.forEach(div => {
 
 function Quiz(props) {
     const [isCorrect, setIsCorrect] = useState(undefined);
+    const [isCorrectDelayed, setIsCorrectDelayed] = useState(undefined);
     useEffect(() => {
         if (isCorrect === false) {
             setTimeout(() => {
                 setIsCorrect(undefined)
             }, 2600)
+        }
+        if (isCorrect === true) {
+            setTimeout(() => {
+                setIsCorrectDelayed(true)
+            }, 1000)
         }
     }, [isCorrect])
 
@@ -33,9 +39,10 @@ function Quiz(props) {
         <div className="paying-attention-frontend">
             <p>{props.question}</p>
             <ul>
-                {props.answer.map((ans, index) => (<li onClick={isCorrect === true ? undefined : () => handleAnswer(index)} key={index}>{ans}</li>))}
+                {props.answer.map((ans, index) => (
+                    <li onClick={isCorrect === true ? undefined : () => handleAnswer(index)} key={index}>{ans}</li>))}
             </ul>
-            <div className={"correct-message" + (isCorrect===true ? " correct-message--visible" : "")}>
+            <div className={"correct-message" + (isCorrect === true ? " correct-message--visible" : "")}>
                 <svg xmlns="http://www.w3.org/2000/svg"
                      width="24"
                      height="24"
@@ -48,7 +55,7 @@ function Quiz(props) {
                 </svg>
                 <p> Great the correct answer is: {props.answer[props.correctAnswer]}</p>
             </div>
-            <div className={"incorrect-message" + (isCorrect===false ? " incorrect-message--visible": "")}>
+            <div className={"incorrect-message" + (isCorrect === false ? " incorrect-message--visible" : "")}>
                 <svg xmlns="http://www.w3.org/2000/svg"
                      width="24"
                      height="24"
