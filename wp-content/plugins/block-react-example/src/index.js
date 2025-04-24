@@ -1,5 +1,7 @@
 import './styles/index.scss'
-import {TextControl, Flex, FlexBlock, FlexItem, Button, Icon} from '@wordpress/components';
+import {TextControl, Flex, FlexBlock, FlexItem, Button, Icon, PanelBody, PanelRow, ColorPicker} from '@wordpress/components';
+import {InspectorControls} from '@wordpress/block-editor'
+
 
 
 const attributes = {
@@ -13,6 +15,10 @@ const attributes = {
     correctAnswer: {
         type: "number",
         default: undefined
+    },
+    bgColor: {
+        type: "string",
+        default: "#EBEBEB"
     }
 
 };
@@ -88,6 +94,13 @@ function EditComponent() {
 
         return (
             <div className="block-react-example">
+                <InspectorControls>
+                    <PanelBody title="Background Color">
+                        <PanelRow>
+                            <ColorPicker label="Background Color" color={props.attributes.backgroundColor}/>
+                        </PanelRow>
+                    </PanelBody>
+                </InspectorControls>
                 <TextControl autoFocus={props.attributes.answer !== undefined} label="Questions ??"
                              value={props.attributes.question} onChange={updateQuestion}
                              style={{fontSize: '20px'}}/>
