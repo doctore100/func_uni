@@ -1,6 +1,7 @@
 import './styles/index.scss'
 import {TextControl, Flex, FlexBlock, FlexItem, Button, Icon, PanelBody, PanelRow, ColorPicker} from '@wordpress/components';
-import {InspectorControls} from '@wordpress/block-editor'
+import {InspectorControls, BlockControls, AlignmentToolbar} from '@wordpress/block-editor'
+import {ChromePicker} from 'react-color'
 
 
 
@@ -19,6 +20,10 @@ const attributes = {
     bgColor: {
         type: "string",
         default: "#EBEBEB"
+    },
+    theAlignment:{
+        type: "string",
+        default: "center"
     }
 
 };
@@ -93,11 +98,13 @@ function EditComponent() {
         }
 
         return (
-            <div className="block-react-example">
+            <div className="block-react-example" style={{backgroundColor: props.attributes.bgColor}}>
                 <InspectorControls>
-                    <PanelBody title="Background Color">
+                    <PanelBody title="Background Color" initialOpen={true}>
                         <PanelRow>
-                            <ColorPicker label="Background Color" color={props.attributes.backgroundColor}/>
+                            <ChromePicker label="Background Color" color={props.attributes.bgColor} onChangeComplete={colorValue => {
+                                props.setAttributes({bgColor: colorValue.hex})
+                            }} disableAlpha={true}/>
                         </PanelRow>
                     </PanelBody>
                 </InspectorControls>
