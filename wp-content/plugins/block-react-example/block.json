@@ -1,0 +1,11 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "block-example/block-react-example",
+  "title": "Block React Example",
+  "script": "file:./build/FrontEnd.js",
+  "editorScript": "file:./build/index.js",
+  "viewScript": [ "file:./view.js", "example-shared-view-script" ],
+  "style":  "file:./build/FrontEnd.css",
+  "editorStyle": "file:./build/index.css"
+}
