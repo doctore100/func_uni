@@ -1,8 +1,17 @@
 import './styles/index.scss'
-import {TextControl, Flex, FlexBlock, FlexItem, Button, Icon, PanelBody, PanelRow, ColorPicker} from '@wordpress/components';
-import {InspectorControls, BlockControls, AlignmentToolbar} from '@wordpress/block-editor'
+import {
+    TextControl,
+    Flex,
+    FlexBlock,
+    FlexItem,
+    Button,
+    Icon,
+    PanelBody,
+    PanelRow,
+    ColorPicker
+} from '@wordpress/components';
+import {InspectorControls, BlockControls, AlignmentToolbar, useBlockProps} from '@wordpress/block-editor'
 import {ChromePicker} from 'react-color'
-
 
 
 const attributes = {
@@ -21,7 +30,7 @@ const attributes = {
         type: "string",
         default: "#EBEBEB"
     },
-    theAlignment:{
+    theAlignment: {
         type: "string",
         default: "center"
     }
@@ -72,8 +81,12 @@ const attributes = {
 })()
 
 
-function EditComponent() {
-    return function (props) {
+function EditComponent(props) {
+        const blockProps = useBlockProps({
+            className: "block-react-example",
+            style: {backgroundColor: props.attributes.bgColor}
+        });
+
         function updateQuestion(value) {
             props.setAttributes({question: value})
         }
@@ -98,13 +111,20 @@ function EditComponent() {
         }
 
         return (
-            <div className="block-react-example" style={{backgroundColor: props.attributes.bgColor}}>
+            <div {...blockProps} >
+                <BlockControls>
+                    <AlignmentToolbar
+                        value={props.attributes.theAlignment}
+                        onChange={value => props.setAttributes({theAlignment: value})}
+                    />
+                </BlockControls>
                 <InspectorControls>
                     <PanelBody title="Background Color" initialOpen={true}>
                         <PanelRow>
-                            <ChromePicker label="Background Color" color={props.attributes.bgColor} onChangeComplete={colorValue => {
-                                props.setAttributes({bgColor: colorValue.hex})
-                            }} disableAlpha={true}/>
+                            <ChromePicker label="Background Color" color={props.attributes.bgColor}
+                                          onChangeComplete={colorValue => {
+                                              props.setAttributes({bgColor: colorValue.hex})
+                                          }} disableAlpha={true}/>
                         </PanelRow>
                     </PanelBody>
                 </InspectorControls>
@@ -124,8 +144,7 @@ function EditComponent() {
                             </FlexBlock>
                             <FlexItem>
                                 <Button onClick={() => markAsCorrect(index)}>
-                                    <Icon className="mark-as-correct"
-                                          icon={props.attributes.correctAnswer === index ? "star-filled" : "star-empty"}/>
+                                    <Icon className="mark-as-correct" icon={props.attributes.correctAnswer === index ? "star-filled" : "star-empty"} />
                                 </Button>
                             </FlexItem>
                             <FlexItem>
@@ -144,15 +163,24 @@ function EditComponent() {
 
             </div>
         )
-    };
+
 }
 
 wp.blocks.registerBlockType('block-example/block-react-example', {
     title: 'Block React Example',
     icon: 'smiley',
     category: 'common',
+    example: {
+        attributes: {
+            question: "What is my name?",
+            correctAnswer: 3,
+            answers: ["Meowsalot", "Barksalot", "Purrsloud", "Brad"],
+            theAlignment: "center",
+            bgColor: "#CFE8F1"
+        }
+    },
     attributes: attributes,
-    edit: EditComponent(),
+    edit: EditComponent,
     save: function () {
         return null
     },
