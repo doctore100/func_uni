@@ -4,7 +4,9 @@
   border: 1px solid #d6d6d6;
   background-color: #f1f1f1;
   .mark-as-correct{
-    color: blue;
+    color: black; /* Color azul más oscuro y visible */
+    font-size: 20px; /* Aumentar tamaño */
+    border: 2px black solid;
     cursor: pointer;
     position: relative;
     top: -3px;

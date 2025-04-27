@@ -1,16 +1,6 @@
 import './styles/index.scss'
-import {
-    TextControl,
-    Flex,
-    FlexBlock,
-    FlexItem,
-    Button,
-    Icon,
-    PanelBody,
-    PanelRow,
-    ColorPicker
-} from '@wordpress/components';
-import {InspectorControls, BlockControls, AlignmentToolbar, useBlockProps} from '@wordpress/block-editor'
+import {Button, Flex, FlexBlock, FlexItem, Icon, PanelBody, PanelRow, TextControl} from '@wordpress/components';
+import {AlignmentToolbar, BlockControls, InspectorControls, useBlockProps} from '@wordpress/block-editor'
 import {ChromePicker} from 'react-color'
 
 
