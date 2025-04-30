@@ -44,7 +44,7 @@ class FeaturedProfessor {
 		}
 	}
 
-	function professor_editor_html() {
+	function professor_editor_html(): void {
 		register_rest_route( 'featuresProfessor/v1', 'get_html', [
 				'methods' => WP_REST_SERVER::READABLE,
 				'callback' => [ $this, 'get_prof_html' ]
@@ -53,7 +53,7 @@ class FeaturedProfessor {
 	}
 
 	function get_prof_html( $data ): string {
-		return generateProfessorHtml( $data['profId'] );
+		return generateProfessorHtml( $data['profId']);
 
 	}
 }
