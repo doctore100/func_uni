@@ -1,5 +1,7 @@
 import "./index.scss"
 import {useSelect} from "@wordpress/data"
+import {useState, useEffect } from "react"
+import apiFetch from "@wordpress/api-fetch"
 
 wp.blocks.registerBlockType("ourplugin/featured-professor", {
     title: "Professor Callout",
@@ -18,6 +20,18 @@ wp.blocks.registerBlockType("ourplugin/featured-professor", {
 })
 
 function EditComponent(props) {
+    const [thePreview, setThePreview] = useState("")
+    useEffect(() => {
+        async function fetchData() {
+            const response = await apiFetch({
+                path: `/featuresProfessor/v1/get_html?prfId${props.attributes.profId}`,
+                method: "GET",
+            })
+            setThePreview(response)
+        }
+        fetchData()
+    }, [props.attributes.profId])
+
     const allProfessors = useSelect(select => {
         return select("core").getEntityRecords("postType", "professor", {perPage: -1})
     });
@@ -36,8 +50,7 @@ function EditComponent(props) {
                     })}
                 </select>
             </div>
-            <div>
-                The HTML preview of the selected professor will appear here.
+            <div dangerouslySetInnerHTML={{__html: thePreview}}>
             </div>
         </div>
     )
