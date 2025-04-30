@@ -24,7 +24,7 @@ function EditComponent(props) {
     useEffect(() => {
         async function fetchData() {
             const response = await apiFetch({
-                path: `/featuresProfessor/v1/get_html?prfId${props.attributes.profId}`,
+                path: `/featuresProfessor/v1/get_html?profId=${props.attributes.profId}`,
                 method: "GET",
             })
             setThePreview(response)
