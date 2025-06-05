@@ -1,7 +1,9 @@
 import "./index.scss"
 import {useSelect} from "@wordpress/data"
-import {useState, useEffect } from "react"
+import {useEffect, useState} from "react"
 import apiFetch from "@wordpress/api-fetch"
+
+const __ = wp.i18n.__
 
 wp.blocks.registerBlockType("ourplugin/featured-professor", {
     title: "Professor Callout",
@@ -21,16 +23,39 @@ wp.blocks.registerBlockType("ourplugin/featured-professor", {
 
 function EditComponent(props) {
     const [thePreview, setThePreview] = useState("")
+
     useEffect(() => {
-        async function fetchData() {
-            const response = await apiFetch({
-                path: `/featuresProfessor/v1/get_html?profId=${props.attributes.profId}`,
-                method: "GET",
-            })
-            setThePreview(response)
+        if (props.attributes.profId) {
+            updateTheMeta()
+
+            async function fetchData() {
+                const response = await apiFetch({
+                    path: `/featuresProfessor/v1/get_html?profId=${props.attributes.profId}`,
+                    method: "GET",
+                })
+                setThePreview(response)
+            }
+
+            fetchData()
         }
-        fetchData()
     }, [props.attributes.profId])
+
+
+    function updateTheMeta() {
+        const profForMeta = wp.data.select("core/block-editor")
+            .getBlocks()
+            .filter(block => block.name === "ourplugin/featured-professor")
+            .map(block => block.attributes.profId)
+            .filter((x, index, arr) => {
+                return arr.indexOf(x) === index;
+            })
+
+        wp.data.dispatch("core/editor").editPost({
+            meta: {
+                featuredProfessor: profForMeta
+            }
+        })
+    }
 
     const allProfessors = useSelect(select => {
         return select("core").getEntityRecords("postType", "professor", {perPage: -1})
@@ -42,7 +67,7 @@ function EditComponent(props) {
         <div className="featured-professor-wrapper">
             <div className="professor-select-container">
                 <select onChange={(e) => props.setAttributes({profId: e.target.value})} value={props.attributes.profId}>
-                    <option value="">Select a Professor</option>
+                    <option value="">{__("Select a Professor", "featured-professor")}</option>
                     {allProfessors.map(prof => {
                         return (<option key={prof.id} value={prof.id}>
                             {prof.title.rendered}
