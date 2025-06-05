@@ -33,7 +33,7 @@ function EditComponent(props) {
                     ))}
                 </ToolbarGroup>
             </BlockControls>
-            <RichText allowedFormats={["core/bold"]} tagName="h1"
+            <RichText allowedFormats={["core/bold", "core/italic"]} tagName="h1"
                       className={`headline headline--${props.attributes.size}`}
                       value={props.attributes.text} onChange={x => props.setAttributes({text: x})}/>
         </>
@@ -53,6 +53,7 @@ function SaveComponent(props) {
                 break;
         }
     }
+
     return <RichText.Content
         tagName={crateTagNames()}
         className={`headline headline--${props.attributes.size}`}
